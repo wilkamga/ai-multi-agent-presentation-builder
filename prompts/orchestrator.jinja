@@ -6,7 +6,7 @@ Each agent must have a system prompt which will be used to define the agent's be
 They will interact with other agents as well. Consider this when defining the system prompts.
 The last agent must be responsible to create the presentation deck. Always return this agent as the last element in the "agents" JSON structure.
 The agents can use Plugins and Tools to support their actions.
-Don't show any link or URL to download.
+The agents can not show any link or URL to download. 
 
 User Ask: Create a presentation about: {{theme}}. 
 Return a JSON output with the following structure: 

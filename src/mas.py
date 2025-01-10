@@ -19,12 +19,7 @@ from azure.identity import DefaultAzureCredential
 from semantic_kernel.connectors.search_engine import BingConnector
 from semantic_kernel.core_plugins import WebSearchEnginePlugin
 from semantic_kernel.connectors.ai.function_choice_behavior import FunctionChoiceBehavior
-from semantic_kernel.filters.filter_types import FilterTypes
-from collections.abc import Coroutine
 from typing import Any
-from semantic_kernel.filters.functions.function_invocation_context import FunctionInvocationContext
-from semantic_kernel.core_plugins.sessions_python_tool.sessions_python_plugin import SessionsPythonTool
-
 from azure.core.credentials import AccessToken
 from azure.core.exceptions import ClientAuthenticationError
 from azure.identity import DefaultAzureCredential
@@ -78,7 +73,7 @@ class Orchestrator:
         dynamic_agents = self.get_dynamic_agents(json_response)
         return dynamic_agents
 
-class ApprovalTerminationStrategy(TerminationStrategy):
+class ApprovalTerminationStrategy(KernelFunctionTerminationStrategy):
     """A strategy for determining when an agent should terminate."""
 
     async def should_agent_terminate(self, agent, history):
@@ -158,7 +153,7 @@ class MultiAgent:
                                     kernel=self._create_kernel_with_chat_completion("termination"),
                                     result_parser=lambda result: termination_keyword in str(result.value[0]).lower(),
                                     history_variable_name="history",
-                                    maximum_iterations=10,
+                                    maximum_iterations=2,
                                 ),
                         )
           

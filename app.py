@@ -94,28 +94,29 @@ async def main(user_input):
     )
 
     is_complete: bool = False
-    while not is_complete:
-        await group.add_chat_message(ChatMessageContent(role=AuthorRole.USER, content=user_input))
+    with st.spinner("Generating presentation..."):
+        while not is_complete:
+            await group.add_chat_message(ChatMessageContent(role=AuthorRole.USER, content=user_input))
 
-        async for response in group.invoke():
-            agent_name = response.name
-            if agent_name in agent_placeholders:
-                agent_placeholders[agent_name].warning(agent_name)
-                await asyncio.sleep(3)  # Highlight duration
-                agent_placeholders[agent_name].info(agent_name)
+            async for response in group.invoke():
+                agent_name = response.name
+                if agent_name in agent_placeholders:
+                    agent_placeholders[agent_name].warning(agent_name)
+                    await asyncio.sleep(3)  # Highlight duration
+                    agent_placeholders[agent_name].info(agent_name)
 
-            st.markdown(f"**{response.role} - {response.name or '*'}**")
-            st.info(response.content)
+                st.markdown(f"**{response.role} - {response.name or '*'}**")
+                st.info(response.content)
 
-        if group.is_complete:
-            st.success("Conversation completed!")
-            st.download_button(
-                "Download Presentation",
-                data=open("ai-multi-agent-presentation-builder/presentation.pptx", "rb").read(),
-                file_name="presentation.pptx",
-                mime="application/vnd.openxmlformats-officedocument.presentationml.presentation"
-            )
-            break
+            if group.is_complete:
+                st.success("Conversation completed!")
+                st.download_button(
+                    "Download Presentation",
+                    data=open("ai-multi-agent-presentation-builder/presentation.pptx", "rb").read(),
+                    file_name="presentation.pptx",
+                    mime="application/vnd.openxmlformats-officedocument.presentationml.presentation"
+                )
+                break
 
 def app():
     st.title(":robot_face: AI Multi-Agent Presentation Builder :robot_face:")
