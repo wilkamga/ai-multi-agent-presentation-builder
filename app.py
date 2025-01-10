@@ -93,7 +93,6 @@ async def main(user_input):
     
     is_complete: bool = False
     while not is_complete:
-
         await group.add_chat_message(ChatMessageContent(role=AuthorRole.USER, content=user_input))
 
         async for response in group.invoke():
@@ -101,17 +100,16 @@ async def main(user_input):
             st.info(response.content)
 
         if group.is_complete:
-            
             st.success("Conversation completed!")
             st.download_button(
-            "Download Presentation",
-            data=open("ai-multi-agent-presentation-builder/presentation.pptx", "rb").read(),
-            file_name="presentation.pptx",
-            mime="application/vnd.openxmlformats-officedocument.presentationml.presentation"
+                "Download Presentation",
+                data=open("ai-multi-agent-presentation-builder/presentation.pptx", "rb").read(),
+                file_name="presentation.pptx",
+                mime="application/vnd.openxmlformats-officedocument.presentationml.presentation"
             )
             break
 
-def main_app():
+def app():
     st.title(":robot_face: AI Multi-Agent Presentation Builder :robot_face:")
     st.subheader("Craft presentations with AI experts")
     user_input = st.text_input("Enter the theme:")
@@ -123,4 +121,4 @@ def main_app():
             st.warning("Please enter a theme!")
 
 if __name__ == "__main__":
-    main_app()
+    app()
