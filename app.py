@@ -4,32 +4,58 @@ from semantic_kernel.contents.chat_message_content import ChatMessageContent
 from semantic_kernel.contents.utils.author_role import AuthorRole
 from src.mas import Orchestrator, MultiAgent
 
-# Apply a custom page config for a better visual experience
 st.set_page_config(
     page_title="AI Multi-Agent Presentation Builder",
     page_icon=":robot_face:",
     layout="wide"
 )
 
-# Add some basic style
+# Enhanced CSS for a more vibrant design
 st.markdown(
     """
     <style>
-    .reportview-container {
-        background: linear-gradient(to right, #e0eafc, #cfdef3);
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+    body {
+        font-family: 'Poppins', sans-serif;
+        background: linear-gradient(-45deg, #f9d423, #ff4e50, #ff6f61, #ffa69e);
+        background-size: 400% 400%;
+        animation: gradientBG 15s ease infinite;
+        margin: 0;
+        padding: 0;
+    }
+    @keyframes gradientBG {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+    .reportview-container, .main .block-container {
+        background: transparent;
         color: #333;
     }
     .sidebar .sidebar-content {
-        background: #f0f2f6;
+        background: rgba(255,255,255,0.95);
+        border-radius: 10px;
+        padding: 1em;
     }
     .stButton>button {
-        background-color: #4CAF50;
-        color: white;
-        border-radius: 8px;
-        height: 3em;
-        width: 100%;
+        background-color: #ff4e50;
+        color: #fff;
+        border: none;
+        border-radius: 10px;
         font-size: 1em;
+        padding: 0.6em 1em;
         margin-top: 1em;
+        transition: 0.3s;
+        box-shadow: 0 4px 15px rgba(255, 78, 80, 0.3);
+    }
+    .stButton>button:hover {
+        background-color: #f9d423;
+        color: #333;
+        box-shadow: 0 6px 20px rgba(249, 212, 35, 0.3);
+    }
+    h1, h2, h3 {
+        color: #fff;
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
     }
     </style>
     """,
@@ -45,12 +71,9 @@ async def run(user_input):
     expert_agents_names = [agent.name for agent in expert_agents]
 
     with st.sidebar:
-        st.subheader("Expert Agents")
-        st.markdown("Creating the Expert Agents")
-
+        st.title("Expert Agents")
         for agent_name in expert_agents_names:
             st.info(agent_name)
-            # Add a 0.5 second delay
             await asyncio.sleep(0.5)
 
     selection_function = mas.create_selection_function(expert_agents_names)
@@ -67,26 +90,37 @@ async def run(user_input):
 
 async def main(user_input):
     group = await run(user_input)
-    await group.add_chat_message(ChatMessageContent(role=AuthorRole.USER, content=user_input))
+    
+    is_complete: bool = False
+    while not is_complete:
 
-    async for response in group.invoke():
-        st.markdown(f"**{response.role} - {response.name or '*'}**")
-        st.info(response.content)
+        await group.add_chat_message(ChatMessageContent(role=AuthorRole.USER, content=user_input))
+
+        async for response in group.invoke():
+            st.markdown(f"**{response.role} - {response.name or '*'}**")
+            st.info(response.content)
 
         if group.is_complete:
+            
             st.success("Conversation completed!")
+            st.download_button(
+            "Download Presentation",
+            data=open("ai-multi-agent-presentation-builder/presentation.pptx", "rb").read(),
+            file_name="presentation.pptx",
+            mime="application/vnd.openxmlformats-officedocument.presentationml.presentation"
+            )
             break
 
 def main_app():
-    st.title("AI Multi-Agent Presentation Builder")
-    st.subheader("Create a stunning presentation with AI agents")
-    user_input = st.text_input("Enter the theme for the presentation:")
+    st.title(":robot_face: AI Multi-Agent Presentation Builder :robot_face:")
+    st.subheader("Craft presentations with AI experts")
+    user_input = st.text_input("Enter the theme:")
 
     if st.button("Create Presentation"):
         if user_input:
             asyncio.run(main(user_input))
         else:
-            st.warning("Please provide a theme before creating a presentation.")
+            st.warning("Please enter a theme!")
 
 if __name__ == "__main__":
     main_app()

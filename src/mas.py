@@ -29,6 +29,7 @@ from azure.core.credentials import AccessToken
 from azure.core.exceptions import ClientAuthenticationError
 from azure.identity import DefaultAzureCredential
 from semantic_kernel.exceptions.function_exceptions import FunctionExecutionException
+from semantic_kernel.agents.strategies.termination.termination_strategy import TerminationStrategy
 
 from src.plugins.presentation import PresentationPlugin
 
@@ -77,12 +78,22 @@ class Orchestrator:
         dynamic_agents = self.get_dynamic_agents(json_response)
         return dynamic_agents
 
+class ApprovalTerminationStrategy(TerminationStrategy):
+    """A strategy for determining when an agent should terminate."""
+
+    async def should_agent_terminate(self, agent, history):
+        """Check if the agent should terminate."""
+        return "approved" in history[-1].content.lower()
+
 class MultiAgent:
     def __init__(self):
         self.project_client = AIProjectClient.from_connection_string(credential=DefaultAzureCredential(),
                                                                      conn_str=os.environ["PROJECT_CONNECTION_STRING"])
         self.model = os.getenv("AZURE_OPENAI_MODEL")
         self.bing_connector = BingConnector(os.getenv("BING_API_KEY"))
+        self.env = Environment(loader=FileSystemLoader(os.getenv('TEMPLATE_DIR_PROMPTS')))
+        self.template_termination = self.env.get_template(os.getenv('TEMPLATE_TERMINATION'))
+        self.template_selection = self.env.get_template(os.getenv('TEMPLATE_SELECTION'))
     
     @staticmethod
     def _create_kernel_with_chat_completion(service_id: str) -> Kernel:
@@ -121,30 +132,15 @@ class MultiAgent:
     
     def create_selection_function(self, expert_agents):
         selection_function = KernelFunctionFromPrompt(function_name="selection",
-                                                        prompt=f"""
-                                                        Determine which participant takes the next turn in a conversation based on the the most recent participant.
-                                                        State only the name of the participant to take the next turn.
-                                                        No participant should take more than one turn in a row.
-
-                                                        Choose only from these participants:
-                                                        {expert_agents}
-
-                                                        History:
-                                                        {{{{$history}}}}
-                                                        """)
+                                                      prompt=self.template_selection.render(expert_agents=expert_agents,
+                                                                                            history=f"{{{{$history}}}}"))
         return selection_function
     
     def create_termination_function(self, termination_keyword):
         selection_function = KernelFunctionFromPrompt(function_name="termination",
-                                                      prompt= f""" 
-                                                        Examine the RESPONSE and determine whether the content has been deemed satisfactory.
-                                                        If content is satisfactory, respond with a single word without explanation: {termination_keyword}.
-                                                        If specific suggestions are being provided, it is not satisfactory.
-                                                        If no correction is suggested, it is satisfactory.
-
-                                                        RESPONSE:
-                                                        {{{{$history}}}}
-              """)
+                                                      prompt=self.template_termination.render(termination_keyword=termination_keyword,
+                                                                                              history=f"{{{{$history}}}}"))
+              
         return selection_function
 
     def create_chat_group(self, expert_agents, selection_function, termination_function, termination_keyword):
