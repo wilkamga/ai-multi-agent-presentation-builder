@@ -12,7 +12,7 @@ class PresentationPlugin:
                             content: Annotated[str, "The content of the decks"]) -> Annotated[str, "Create a presentation."]:
 
         # Create a presentation object
-        prs = Presentation(pptx='ai-multi-agent-presentation-builder/green.pptx')
+        prs = Presentation(pptx='green.pptx')
 
         # Split the content into slides
         slides_content = content.split("\n\n")
@@ -28,7 +28,7 @@ class PresentationPlugin:
             slide.placeholders[1].text = "\n".join(body)
 
         # Save the presentation
-        output_path = "ai-multi-agent-presentation-builder/presentation.pptx"
+        output_path = "presentation.pptx"
         prs.save(output_path)
 
         return output_path

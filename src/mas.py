@@ -82,8 +82,6 @@ class ApprovalTerminationStrategy(KernelFunctionTerminationStrategy):
 
 class MultiAgent:
     def __init__(self):
-        self.project_client = AIProjectClient.from_connection_string(credential=DefaultAzureCredential(),
-                                                                     conn_str=os.environ["PROJECT_CONNECTION_STRING"])
         self.model = os.getenv("AZURE_OPENAI_MODEL")
         self.bing_connector = BingConnector(os.getenv("BING_API_KEY"))
         self.env = Environment(loader=FileSystemLoader(os.getenv('TEMPLATE_DIR_PROMPTS')))
