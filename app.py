@@ -70,11 +70,17 @@ async def run(user_input):
     expert_agents = mas.create_agents(dynamic_agents)
     expert_agents_names = [agent.name for agent in expert_agents]
 
+    return expert_agents, expert_agents_names, mas
+
+async def main(user_input):
+    expert_agents, expert_agents_names, mas = await run(user_input)
+    
     with st.sidebar:
         st.title("Expert Agents")
+        agent_placeholders = {name: st.empty() for name in expert_agents_names}
         for agent_name in expert_agents_names:
-            st.info(agent_name)
-            await asyncio.sleep(0.5)
+            agent_placeholders[agent_name].info(agent_name)
+            await asyncio.sleep(2)
 
     selection_function = mas.create_selection_function(expert_agents_names)
     termination_keyword = 'yes'
@@ -86,16 +92,18 @@ async def run(user_input):
         termination_function,
         termination_keyword
     )
-    return group
 
-async def main(user_input):
-    group = await run(user_input)
-    
     is_complete: bool = False
     while not is_complete:
         await group.add_chat_message(ChatMessageContent(role=AuthorRole.USER, content=user_input))
 
         async for response in group.invoke():
+            agent_name = response.name
+            if agent_name in agent_placeholders:
+                agent_placeholders[agent_name].warning(agent_name)
+                await asyncio.sleep(3)  # Highlight duration
+                agent_placeholders[agent_name].info(agent_name)
+
             st.markdown(f"**{response.role} - {response.name or '*'}**")
             st.info(response.content)
 
