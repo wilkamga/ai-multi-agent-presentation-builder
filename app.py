@@ -112,18 +112,24 @@ async def main(user_input):
                 st.success("Conversation completed!")
                 st.download_button(
                     "Download Presentation",
-                    data=open("ai-multi-agent-presentation-builder/presentation.pptx", "rb").read(),
+                    data=open("presentation.pptx", "rb").read(),
                     file_name="presentation.pptx",
                     mime="application/vnd.openxmlformats-officedocument.presentationml.presentation"
                 )
+        
                 break
 
 def app():
-    st.title(":robot_face: AI Multi-Agent Presentation Builder :robot_face:")
-    st.subheader("Craft presentations with AI experts")
+    st.title(":robot_face: AI Multi-Agent Draft Presentation Builder :robot_face:")
+    st.subheader("Create draft presentations with AI experts")
     user_input = st.text_input("Enter the theme:")
 
-    if st.button("Create Presentation"):
+    if 'run_button' in st.session_state and st.session_state.run_button == True:
+        st.session_state.running = True
+    else:
+        st.session_state.running = False
+
+    if st.button('Create a Presentation', disabled=st.session_state.running, key='run_button'):
         if user_input:
             asyncio.run(main(user_input))
         else:
