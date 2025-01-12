@@ -6,7 +6,8 @@ Each agent must have a system prompt which will be used to define the agent's be
 One of the agents will be responsible to organize the content into slides. Each slice must have a specific title and content. 
 This agent must use markdown title tag (single #) to define the titles.
 They will interact with other agents as well. Consider this when defining the system prompts.
-The last agent must be responsible to create the presentation deck. Always return this agent as the last element in the "agents" JSON structure.
+The last agent must be responsible to create the presentation deck. It will have a list of presentation templates to consider. 
+Always return this agent as the last element in the "agents" JSON structure.
 The agents can use Plugins and Tools to support their actions.
 The agents cannot show any link or URL to download (consider this rule in each system prompt).
 

@@ -1,6 +1,7 @@
 from typing import Annotated
 from semantic_kernel.functions.kernel_function_decorator import kernel_function
 from pptx import Presentation
+import os
 
 
 class PresentationPlugin:
@@ -10,10 +11,12 @@ class PresentationPlugin:
     def create_presentation(self, 
                             title: Annotated[str, "The title of the presentation"],
                             subtitle: Annotated[str, "The subtitle of the presentation"],
-                            content: Annotated[str, "The content of the decks"]) -> Annotated[str, "Create a presentation."]:
+                            content: Annotated[str, "The content of the decks"],
+                            template: Annotated[str, "The template to use for the presentation"] = 'default.pptx'
+                            ) -> Annotated[str, "Create a presentation."]:
 
         # Create a presentation object
-        prs = Presentation(pptx='green.pptx')
+        prs = Presentation(pptx='templates/' + template)
 
         # Remove title and subtitle from the slides content
         content = content.replace(title, '')
@@ -47,3 +50,12 @@ class PresentationPlugin:
         prs.save(output_path)
 
         return output_path
+
+    @kernel_function(description="List available presentation templates (.ppt and .pptx).")
+    def list_templates(self) -> Annotated[list[str], "Available .ppt and .pptx templates"]:
+        templates_dir = "templates"
+        templates = [
+            file for file in os.listdir(templates_dir)
+            if file.endswith(".ppt") or file.endswith(".pptx")
+        ]
+        return templates
