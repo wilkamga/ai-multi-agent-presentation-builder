@@ -124,9 +124,18 @@ async def main(user_input, num_agents, max_interactions=10):
 def app():
     st.title(":robot_face: AI Multi-Agent Draft Presentation Builder :robot_face:")
     st.subheader("Create draft presentations with AI experts")
-    user_input = st.text_input("Enter the theme:")
-    col1, col2, col3 = st.columns([1, 2, 1])
-    with col1:
+    col = st.columns([1, 1, 1])[0]
+    user_input = col.text_input(
+        "Enter the theme:",
+        max_chars=150,
+        help="Provide the main theme for your presentation.",
+        placeholder="e.g., Artificial Intelligence in Healthcare"
+    )
+    if user_input:
+        st.success("Theme received!")
+
+    col = st.columns([1, 2, 1])[0]
+    with col:
         num_agents = st.slider("Number of agents", min_value=2, max_value=5, value=4)
 
     if 'run_button' in st.session_state and st.session_state.run_button == True:
