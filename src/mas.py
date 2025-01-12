@@ -1,6 +1,6 @@
 import datetime
 import os, json, re
-from typing import Any, Coroutine
+from typing import Any
 from jinja2 import Environment, FileSystemLoader
 from openai import AzureOpenAI
 from semantic_kernel.kernel import Kernel
@@ -14,17 +14,14 @@ from semantic_kernel.agents.strategies.termination.kernel_function_termination_s
 )
 from semantic_kernel.functions.kernel_function_from_prompt import KernelFunctionFromPrompt
 
-from azure.ai.projects import AIProjectClient
 from azure.identity import DefaultAzureCredential
 from semantic_kernel.connectors.search_engine import BingConnector
 from semantic_kernel.core_plugins import WebSearchEnginePlugin
 from semantic_kernel.connectors.ai.function_choice_behavior import FunctionChoiceBehavior
 from typing import Any
-from azure.core.credentials import AccessToken
 from azure.core.exceptions import ClientAuthenticationError
 from azure.identity import DefaultAzureCredential
 from semantic_kernel.exceptions.function_exceptions import FunctionExecutionException
-from semantic_kernel.agents.strategies.termination.termination_strategy import TerminationStrategy
 
 from src.plugins.presentation import PresentationPlugin
 
