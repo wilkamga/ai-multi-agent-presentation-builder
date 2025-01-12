@@ -1,40 +1,55 @@
-# Project Name
+# AI Multi-Agent Presentation Builder
 
-(short, 1-3 sentenced, description of the project)
+Create draft presentations effortlessly with the power of AI. This project leverages multiple AI agents to collaboratively generate presentation content based on user input. 
+
+This repository is designed for learning purposes, offering insights into the development and integration of multi-agent systems for automated content creation.
 
 ## Features
 
 This project framework provides the following features:
 
-* Feature 1
-* Feature 2
-* ...
+* **Dynamic Agent Creation**: Automatically generates AI agents tailored to specific tasks.
+* **Collaborative AI**: Multiple AI agents work together to create comprehensive presentations.
+* **Streamlit Integration**: User-friendly web interface for seamless interaction.
+* **Customizable Templates**: Use Jinja templates to define agent behaviors and prompts.
+* **Presentation Export**: Generate and download presentations in PPTX format.
 
 ## Getting Started
 
 ### Prerequisites
 
-(ideally very short, if any)
-
-- OS
-- Library version
-- ...
+- OS: Windows, macOS, or Linux
+- Python 3.8+
+- Azure OpenAI API Key
+- Bing API Key
 
 ### Installation
 
-(ideally very short)
+1. Clone the repository:
+    ```sh
+    git clone [repository clone url]
+    cd [repository name]
+    ```
 
-- npm install [package name]
-- mvn install
-- ...
+2. Install the required Python packages:
+    ```sh
+    pip install -r requirements.txt
+    ```
+
+3. Set up your environment variables:
+    - Copy  to  and fill in your API keys and other configurations.
+    - You can use the [.env.sample](.env.sample) file to adjust your own environment variables. Rename the file to `.env` and change each one with your own data.
 
 ### Quickstart
-(Add steps to get up and running quickly)
 
-1. git clone [repository clone url]
-2. cd [repository name]
-3. ...
+1. Run the Streamlit app:
+    ```sh
+    streamlit run app.py
+    ```
 
+2. Open your browser and navigate to `http://localhost:8501`.
+
+3. Enter a theme for your presentation and let the AI agents do the rest!
 
 ## Demo
 
@@ -42,16 +57,20 @@ A demo app is included to show how to use the project.
 
 To run the demo, follow these steps:
 
-(Add steps to start up the demo)
-
-1.
-2.
-3.
+1. Ensure all prerequisites are met.
+2. Follow the Quickstart guide to run the Streamlit app.
+3. Interact with the AI agents and generate a presentation.
 
 ## Resources
 
-(Any additional resources or related projects)
+- [Azure OpenAI Documentation](https://learn.microsoft.com/en-us/azure/cognitive-services/openai/)
+- [Streamlit Documentation](https://docs.streamlit.io/)
+- [Jinja Documentation](https://jinja.palletsprojects.com/)
 
-- Link to supporting information
-- Link to similar sample
-- ...
+## Contributing
+
+This project welcomes contributions and suggestions. Please read the  for guidelines on how to contribute.
+
+## License
+
+This project is licensed under the MIT License. See the  file for details.
