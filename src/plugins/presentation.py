@@ -12,8 +12,12 @@ class PresentationPlugin:
                             title: Annotated[str, "The title of the presentation"],
                             subtitle: Annotated[str, "The subtitle of the presentation"],
                             content: Annotated[str, "The content of the decks"],
-                            template: Annotated[str, "The template to use for the presentation"] = 'default.pptx'
+                            template: Annotated[str, "The presentation template from the list_templates method"] = 'default.pptx'
                             ) -> Annotated[str, "Create a presentation."]:
+
+        # Check if there is a .pptx extension
+        if not template.endswith('.pptx'):
+            template += '.pptx'
 
         # Create a presentation object
         prs = Presentation(pptx='templates/' + template)

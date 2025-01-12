@@ -2,7 +2,7 @@
 
 Create draft presentations effortlessly with the power of AI. This project leverages multiple AI agents to collaboratively generate presentation content based on user input. 
 
-This repository is designed for learning purposes, offering insights into the development and integration of multi-agent systems for automated content creation.
+This repository is designed for **learning purposes**, offering insights into the development and integration of multi-agent systems for automated content creation.
 
 ## Features
 
