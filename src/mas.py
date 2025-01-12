@@ -26,7 +26,7 @@ from semantic_kernel.exceptions.function_exceptions import FunctionExecutionExce
 from src.plugins.presentation import PresentationPlugin
 
 class Orchestrator:
-    def __init__(self, user_input):
+    def __init__(self, user_input, num_agents):
         self.client = AzureOpenAI(
             azure_endpoint=os.getenv("AZURE_OPENAI_ENDPOINT"),
             api_key=os.getenv("AZURE_OPENAI_API_KEY"),
@@ -36,12 +36,14 @@ class Orchestrator:
         self.env = Environment(loader=FileSystemLoader(os.getenv('TEMPLATE_DIR_PROMPTS')))
         self.template = self.env.get_template(os.getenv('TEMPLATE_SYSTEM_ORCHESTRATOR'))
         self.theme = user_input
+        self.num_agents = num_agents
 
     def get_response(self):
         response = self.client.chat.completions.create(
             model=os.getenv("AZURE_OPENAI_MODEL_ORCHESTRATOR"),
             messages=[
-                {"role": "user", "content": self.template.render(theme=self.theme)},
+                {"role": "user", "content": self.template.render(theme=self.theme,
+                                                                num_agents=self.num_agents)},
             ],
             max_completion_tokens=5000
         )

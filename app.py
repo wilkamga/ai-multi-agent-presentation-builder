@@ -62,8 +62,8 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-async def run(user_input):
-    orchestrator = Orchestrator(user_input)
+async def run(user_input, num_agents):
+    orchestrator = Orchestrator(user_input, num_agents)
     dynamic_agents = orchestrator.run()
 
     mas = MultiAgent()
@@ -72,8 +72,8 @@ async def run(user_input):
 
     return expert_agents, expert_agents_names, mas
 
-async def main(user_input, max_interactions=10):
-    expert_agents, expert_agents_names, mas = await run(user_input)
+async def main(user_input, num_agents, max_interactions=10):
+    expert_agents, expert_agents_names, mas = await run(user_input, num_agents)
     
     with st.sidebar:
         st.title("Expert Agents")
@@ -125,15 +125,18 @@ def app():
     st.title(":robot_face: AI Multi-Agent Draft Presentation Builder :robot_face:")
     st.subheader("Create draft presentations with AI experts")
     user_input = st.text_input("Enter the theme:")
+    col1, col2, col3 = st.columns([1, 2, 1])
+    with col1:
+        num_agents = st.slider("Number of agents", min_value=2, max_value=5, value=4)
 
     if 'run_button' in st.session_state and st.session_state.run_button == True:
         st.session_state.running = True
     else:
         st.session_state.running = False
 
-    if st.button('Create a Presentation', disabled=st.session_state.running, key='run_button'):
+    if st.button('Create a draft Presentation', disabled=st.session_state.running, key='run_button'):
         if user_input:
-            asyncio.run(main(user_input))
+            asyncio.run(main(user_input, num_agents))
         else:
             st.warning("Please enter a theme!")
 
