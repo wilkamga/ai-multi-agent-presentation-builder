@@ -72,7 +72,7 @@ async def run(user_input):
 
     return expert_agents, expert_agents_names, mas
 
-async def main(user_input):
+async def main(user_input, max_interactions=10):
     expert_agents, expert_agents_names, mas = await run(user_input)
     
     with st.sidebar:
@@ -93,10 +93,12 @@ async def main(user_input):
         termination_keyword
     )
 
+    interactions: int = 0
     is_complete: bool = False
     with st.spinner("Generating presentation..."):
-        while not is_complete:
+        while not is_complete and interactions < max_interactions:
             await group.add_chat_message(ChatMessageContent(role=AuthorRole.USER, content=user_input))
+            interactions += 1
 
             async for response in group.invoke():
                 agent_name = response.name

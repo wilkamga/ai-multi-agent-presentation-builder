@@ -1,0 +1,6 @@
+openai
+azure-identity
+Jinja2
+semantic-kernel
+python-pptx
+streamlit
