@@ -2,6 +2,8 @@
 
 Create draft presentations effortlessly with the power of AI. This project leverages multiple AI agents to collaboratively generate presentation content based on user input. 
 
+**Semantic Kernel** is utilized for agent orchestration, enabling seamless coordination and communication between different AI agents. By leveraging Semantic Kernel, the system efficiently manages task delegation, context sharing, and workflow automation, ensuring that each agent contributes effectively to the content creation process.
+
 This repository is designed for **learning purposes**, offering insights into the development and integration of multi-agent systems for automated content creation.
 
 ## Features
@@ -13,6 +15,9 @@ This project framework provides the following features:
 * **Streamlit Integration**: User-friendly web interface for seamless interaction.
 * **Customizable Templates**: Use Jinja templates to define agent behaviors and prompts.
 * **Presentation Export**: Generate and download presentations in PPTX format.
+
+## Demo
+![MAS-Presentation-Builder](mas-presentation-builder.gif)
 
 ## Getting Started
 
