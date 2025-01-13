@@ -88,9 +88,10 @@ class MultiAgent:
         self.template_selection = self.env.get_template(os.getenv('TEMPLATE_SELECTION'))
     
     @staticmethod
-    def _create_kernel_with_chat_completion(service_id: str) -> Kernel:
+    def _create_kernel_with_chat_completion(service_id: str, deployment_name: str) -> Kernel:
         kernel = Kernel()
-        kernel.add_service(AzureChatCompletion(service_id=service_id))
+        kernel.add_service(AzureChatCompletion(service_id=service_id, 
+                                               deployment_name=deployment_name))
         return kernel
     
     @staticmethod
@@ -102,7 +103,7 @@ class MultiAgent:
         for agent in dynamic_agents:
 
             agent_name = self._standardize_string(agent['name'])
-            kernel = self._create_kernel_with_chat_completion(agent_name)            
+            kernel = self._create_kernel_with_chat_completion(agent_name, self.model)            
         
             # Configure the function choice behavior to auto invoke kernel functions
             settings = kernel.get_prompt_execution_settings_from_service_id(service_id=agent_name)
@@ -139,7 +140,7 @@ class MultiAgent:
         group = AgentGroupChat(agents=expert_agents,
                                selection_strategy=KernelFunctionSelectionStrategy(
                                     function=selection_function,
-                                    kernel=self._create_kernel_with_chat_completion("selection"),
+                                    kernel=self._create_kernel_with_chat_completion("selection", self.model),
                                     result_parser=lambda result: str(result.value[0]) if result.value is not None else expert_agents[-1].name,
                                     agent_variable_name="agents",
                                     history_variable_name="history",
@@ -147,7 +148,7 @@ class MultiAgent:
                                 termination_strategy=KernelFunctionTerminationStrategy(
                                     agents=[expert_agents[-1]],
                                     function=termination_function,
-                                    kernel=self._create_kernel_with_chat_completion("termination"),
+                                    kernel=self._create_kernel_with_chat_completion("termination", self.model),
                                     result_parser=lambda result: termination_keyword in str(result.value[0]).lower(),
                                     history_variable_name="history",
                                     maximum_iterations=2,

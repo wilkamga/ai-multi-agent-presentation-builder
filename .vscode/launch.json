@@ -21,6 +21,7 @@
             "request": "launch",
             "module": "streamlit",
             "justMyCode": false,
+            "envFile": "${workspaceFolder}/.env",
             "args": [
                  "run",
                  "${file}",
