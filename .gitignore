@@ -170,3 +170,7 @@ cython_debug/
 # PyPI configuration file
 .pypirc
 presentation.pptx
+
+
+# vsCode
+.vscode/settings.json
