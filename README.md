@@ -25,7 +25,6 @@ This project framework provides the following features:
 
 ### Prerequisites
 
-- OS: Windows, macOS, or Linux
 - Python 3.8+
 - Azure OpenAI API Key
 - Bing API Key
@@ -76,7 +75,7 @@ To run the demo, follow these steps:
 
 ## Contributing
 
-This project welcomes contributions and suggestions. Please read the  for guidelines on how to contribute.
+This project welcomes contributions and suggestions. Please open a PR and it will be analyzed as soon as possible.
 
 ## License
 
