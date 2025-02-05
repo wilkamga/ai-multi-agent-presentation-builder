@@ -7,6 +7,7 @@ In this repository, we demonstrate how to use **Semantic Kernel** to orchestrate
 **Semantic Kernel** is utilized for agent orchestration, enabling seamless coordination and communication between different AI agents. By leveraging Semantic Kernel, the system efficiently manages task delegation, context sharing, and workflow automation, ensuring that each agent contributes effectively to the content creation process.
 
 This repository is designed for **learning purposes**, offering insights into the development and integration of multi-agent systems for automated content creation.
+The deck created is only to demonstrate how to add external capabilities with custom Plugins, but there is no intention 
 
 The diagram below shows how the orchestrator create the agents and the expert agents collaborate with each other to accomplish the goal:
 
