@@ -25,6 +25,9 @@ from semantic_kernel.exceptions.function_exceptions import FunctionExecutionExce
 
 from src.plugins.presentation import PresentationPlugin
 
+from dotenv import load_dotenv
+load_dotenv()
+
 class Orchestrator:
     def __init__(self, user_input, num_agents):
         self.client = AzureOpenAI(
@@ -112,11 +115,9 @@ class MultiAgent:
             kernel.add_plugin(WebSearchEnginePlugin(BingConnector()), "WebSearch")
             kernel.add_plugin(PresentationPlugin(), "Presentation")
            
-            expert = ChatCompletionAgent(service_id=agent_name,
-                                         kernel=kernel,
+            expert = ChatCompletionAgent(kernel=kernel,
                                          name=agent_name,
-                                         instructions=agent['system_prompt'],
-                                         execution_settings=settings            
+                                         instructions=agent['system_prompt']           
                                         )
             expert_agents.append(expert)
 
